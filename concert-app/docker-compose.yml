@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: concert_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: concert_user
+      POSTGRES_PASSWORD: concert_password
+      POSTGRES_DB: concert_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
