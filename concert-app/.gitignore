@@ -1,0 +1,19 @@
+
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+.env.local
+
+# Next.js
+frontend/.next/
+
+# NestJS build
+backend/dist/
+
+# Database
+db_data/
+
+# OS
+.DS_Store
