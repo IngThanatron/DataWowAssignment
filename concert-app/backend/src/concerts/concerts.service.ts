@@ -23,6 +23,12 @@ export class ConcertsService {
   }
 
   async delete(id: number) {
+    // Delete all reservations for this concert first
+    await this.prisma.reservation.deleteMany({
+      where: { concertId: id },
+    });
+
+    // Then delete the concert
     return this.prisma.concert.delete({
       where: { id },
     });
