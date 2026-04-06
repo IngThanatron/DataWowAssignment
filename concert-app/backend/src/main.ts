@@ -5,13 +5,19 @@ import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.enableCors({
+    origin: 'http://localhost:3000', // Next.js default port
+  });
+
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true, // strips unknown fields
-      forbidNonWhitelisted: true, // throws error on unknown fields
-      transform: true, // auto-converts types (e.g. string → number)
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
     }),
   );
+
   await app.listen(3001);
 }
 bootstrap();
