@@ -21,3 +21,5 @@ export class ConcertsController {
     return this.concertsService.delete(Number(id));
   }
 }
+
+//Where to tell what each method DO

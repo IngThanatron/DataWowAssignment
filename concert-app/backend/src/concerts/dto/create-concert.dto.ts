@@ -13,3 +13,4 @@ export class CreateConcertDto {
   @Min(1)
   totalSeats: number;
 }
+//Type for POST
