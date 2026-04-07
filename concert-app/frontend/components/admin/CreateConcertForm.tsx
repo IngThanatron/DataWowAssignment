@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { api } from "../../lib/api";
+import { Button } from "../Button";
 
 interface Props {
   onSuccess: () => void;
@@ -82,13 +83,9 @@ export default function CreateConcertForm({ onSuccess }: Props) {
           />
         </div>
         {error && <p className="text-red-500 text-sm">{error}</p>}
-        <button
-          onClick={handleSubmit}
-          disabled={loading}
-          className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded text-sm font-medium disabled:opacity-50 transition-colors"
-        >
+        <Button onClick={handleSubmit} disabled={loading} bgColor="blue">
           {loading ? "Creating..." : "Create Concert"}
-        </button>
+        </Button>
       </div>
     </div>
   );

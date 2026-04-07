@@ -38,20 +38,28 @@ export class ReservationsService {
       throw new NotFoundException('Concert not found');
     }
 
-    // Check if seats are available
     if (concert._count.reservations >= concert.totalSeats) {
       throw new BadRequestException('Concert is fully booked');
     }
 
-    // Check if user already has a reservation
+    // Check if reservation already exists (active or cancelled)
     const existing = await this.prisma.reservation.findFirst({
-      where: { userId: dto.userId, concertId: dto.concertId, status: 'ACTIVE' },
+      where: { userId: dto.userId, concertId: dto.concertId },
     });
 
     if (existing) {
-      throw new BadRequestException(
-        'You already have a reservation for this concert',
-      );
+      if (existing.status === 'ACTIVE') {
+        throw new BadRequestException(
+          'You already have a reservation for this concert',
+        );
+      }
+
+      // Re-activate cancelled reservation instead of creating new one
+      return this.prisma.reservation.update({
+        where: { id: existing.id },
+        data: { status: 'ACTIVE' },
+        include: { concert: true },
+      });
     }
 
     return this.prisma.reservation.create({

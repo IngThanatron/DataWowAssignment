@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { api } from "../../lib/api";
 import ConfirmModal from "../ConfirmModal";
-import Toast from "../Toast";
+import { Button } from "../Button";
 
 interface Props {
   concert: any;
@@ -13,10 +13,6 @@ interface Props {
 export default function AdminConcertCard({ concert, onUpdate }: Props) {
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [toast, setToast] = useState<{
-    message: string;
-    type: "success" | "error";
-  } | null>(null);
 
   const availableSeats = concert.totalSeats - concert._count.reservations;
 
@@ -25,13 +21,10 @@ export default function AdminConcertCard({ concert, onUpdate }: Props) {
     try {
       await api.deleteConcert(concert.id);
       setShowModal(false);
-      setToast({
-        message: `"${concert.name}" deleted successfully`,
-        type: "success",
-      });
       onUpdate();
+      //toaster
     } catch (err) {
-      setToast({ message: "Failed to delete concert", type: "error" });
+      //toaster
     } finally {
       setLoading(false);
     }
@@ -45,7 +38,7 @@ export default function AdminConcertCard({ concert, onUpdate }: Props) {
         <p className="text-gray-700 text-sm leading-relaxed">
           {concert.description}
         </p>
-        <div className="flex items-center justify-between mt-6">
+        <div className="flex flex-col sm:flex-row gap-4 items-center justify-between mt-6">
           <div className="flex items-center gap-2 text-gray-600 text-sm">
             <svg
               width="16"
@@ -60,12 +53,9 @@ export default function AdminConcertCard({ concert, onUpdate }: Props) {
             </svg>
             <span>{availableSeats.toLocaleString()}</span>
           </div>
-          <button
-            onClick={() => setShowModal(true)}
-            className="flex items-center gap-2 bg-red-400 hover:bg-red-500 text-white px-6 py-2 rounded text-sm font-medium transition-colors"
-          >
+          <Button bgColor="red" onClick={() => setShowModal(true)}>
             🗑 Delete
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -76,14 +66,6 @@ export default function AdminConcertCard({ concert, onUpdate }: Props) {
           onConfirm={handleDelete}
           onCancel={() => setShowModal(false)}
           loading={loading}
-        />
-      )}
-
-      {true && (
-        <Toast
-          message={toast && toast.message}
-          type={toast && toast.type}
-          onClose={() => setToast(null)}
         />
       )}
     </>

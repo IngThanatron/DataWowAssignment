@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { api } from "../lib/api";
+import { Button } from "./Button";
 
 interface Props {
   concert: any;
@@ -56,7 +57,7 @@ export default function ConcertCard({
         {concert.description}
       </p>
 
-      <div className="flex items-center justify-between mt-6">
+      <div className="flex flex-col sm:flex-row gap-4 items-center justify-between mt-6">
         <div className="flex items-center gap-2 text-gray-600 text-sm">
           <svg
             width="16"
@@ -73,28 +74,17 @@ export default function ConcertCard({
         </div>
 
         {reservation ? (
-          <button
-            onClick={handleCancel}
-            disabled={loading}
-            className="bg-red-400 hover:bg-red-500 text-white px-8 py-2 rounded text-sm font-medium disabled:opacity-50 transition-colors"
-          >
+          <Button onClick={handleCancel} disabled={loading} bgColor="red">
             {loading ? "Cancelling..." : "Cancel"}
-          </button>
+          </Button>
         ) : isFull ? (
-          <button
-            disabled
-            className="bg-gray-200 text-gray-400 px-8 py-2 rounded text-sm font-medium cursor-not-allowed"
-          >
+          <Button disabled bgColor="gray">
             Sold Out
-          </button>
+          </Button>
         ) : (
-          <button
-            onClick={handleReserve}
-            disabled={loading}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-2 rounded text-sm font-medium disabled:opacity-50 transition-colors"
-          >
+          <Button onClick={handleReserve} disabled={loading} bgColor="blue">
             {loading ? "Reserving..." : "Reserve"}
-          </button>
+          </Button>
         )}
       </div>
 

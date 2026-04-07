@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { api } from "../../lib/api";
-import AdminSidebar from "./AdminSidebar";
 import StatCard from "./StatCard";
 import AdminConcertCard from "./AdminConcertCard";
 import CreateConcertForm from "./CreateConcertForm";
+import Sidebar from "../Sidebar";
 
 export default function AdminDashboard() {
   const [concerts, setConcerts] = useState<any[]>([]);
@@ -40,12 +40,17 @@ export default function AdminDashboard() {
     (r) => r.status === "CANCELLED",
   ).length;
 
+  const hometab = [
+    { label: "Overview", value: "overview" },
+    { label: "Create", value: "create" },
+  ];
+
   return (
     <div className="flex min-h-screen bg-gray-100">
-      <AdminSidebar activeTab={activeTab} onTabChange={setActiveTab} />
+      <Sidebar role="admin" activeTab={activeTab} onTabChange={setActiveTab} />
       <div className="flex-1 p-10">
         {/* Stat Cards */}
-        <div className="flex gap-4 mb-8">
+        <div className="flex flex-col sm:flex-row  gap-4 mb-8">
           <StatCard
             icon="👤"
             label="Total of seats"
@@ -69,26 +74,19 @@ export default function AdminDashboard() {
         {/* Tabs */}
         {activeTab !== "history" && (
           <div className="flex gap-6 border-b border-gray-300 mb-6">
-            <button
-              onClick={() => setActiveTab("overview")}
-              className={`pb-2 text-sm font-medium transition-colors ${
-                activeTab === "overview"
-                  ? "text-blue-500 border-b-2 border-blue-500"
-                  : "text-gray-400 hover:text-gray-600"
-              }`}
-            >
-              Overview
-            </button>
-            <button
-              onClick={() => setActiveTab("create")}
-              className={`pb-2 text-sm font-medium transition-colors ${
-                activeTab === "create"
-                  ? "text-blue-500 border-b-2 border-blue-500"
-                  : "text-gray-400 hover:text-gray-600"
-              }`}
-            >
-              Create
-            </button>
+            {hometab.map((tab) => (
+              <button
+                key={tab.value}
+                onClick={() => setActiveTab(tab.value)}
+                className={`pb-2 text-sm font-medium transition-colors cursor-pointer ${
+                  activeTab === tab.value
+                    ? "text-blue-500 border-b-2 border-blue-500"
+                    : "text-gray-400 hover:text-gray-600"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
           </div>
         )}
 
