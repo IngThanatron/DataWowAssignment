@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { api } from "../../lib/api";
 import ConfirmModal from "../ConfirmModal";
 import { Button } from "../Button";
@@ -22,9 +23,9 @@ export default function AdminConcertCard({ concert, onUpdate }: Props) {
       await api.deleteConcert(concert.id);
       setShowModal(false);
       onUpdate();
-      //toaster
-    } catch (err) {
-      //toaster
+      toast.success("Concert deleted");
+    } catch (err: any) {
+      toast.error(err.message || "Failed to delete concert");
     } finally {
       setLoading(false);
     }

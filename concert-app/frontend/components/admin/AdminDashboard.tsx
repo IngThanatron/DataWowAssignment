@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { api } from "../../lib/api";
 import StatCard from "./StatCard";
 import AdminConcertCard from "./AdminConcertCard";
@@ -22,7 +23,7 @@ export default function AdminDashboard() {
       setConcerts(concertsData);
       setReservations(reservationsData);
     } catch (err) {
-      console.error(err);
+      toast.error("Failed to load data");
     } finally {
       setLoading(false);
     }

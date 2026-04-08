@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { api } from "../lib/api";
 import { Button } from "./Button";
 
@@ -18,19 +19,18 @@ export default function ConcertCard({
   onUpdate,
 }: Props) {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
   const availableSeats = concert.totalSeats - concert._count.reservations;
   const isFull = availableSeats <= 0;
 
   const handleReserve = async () => {
     setLoading(true);
-    setError("");
     try {
       await api.createReservation({ userId, concertId: concert.id });
+      toast.success("Seat reserved!");
       onUpdate();
     } catch (err: any) {
-      setError(err.message);
+      toast.error(err.message || "Failed to reserve seat");
     } finally {
       setLoading(false);
     }
@@ -38,12 +38,12 @@ export default function ConcertCard({
 
   const handleCancel = async () => {
     setLoading(true);
-    setError("");
     try {
       await api.cancelReservation(reservation.id);
+      toast.success("Reservation cancelled");
       onUpdate();
     } catch (err: any) {
-      setError(err.message);
+      toast.error(err.message || "Failed to cancel reservation");
     } finally {
       setLoading(false);
     }
@@ -88,7 +88,6 @@ export default function ConcertCard({
         )}
       </div>
 
-      {error && <p className="text-red-500 text-xs mt-3">{error}</p>}
     </div>
   );
 }

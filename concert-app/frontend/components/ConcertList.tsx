@@ -1,16 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { api } from "../lib/api";
 import ConcertCard from "./ConcertCard";
 
 const CURRENT_USER_ID = 1;
+//hardcoded for demo purposes, in a real app this would come from auth context or similar
 
 export default function ConcertList() {
   const [concerts, setConcerts] = useState<any[]>([]);
   const [myReservations, setMyReservations] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
   const fetchData = async () => {
     try {
@@ -21,7 +22,7 @@ export default function ConcertList() {
       setConcerts(concertsData);
       setMyReservations(reservationsData);
     } catch (err) {
-      setError("Failed to load concerts");
+      toast.error("Failed to load concerts");
     } finally {
       setLoading(false);
     }
@@ -38,7 +39,6 @@ export default function ConcertList() {
   };
 
   if (loading) return <p className="text-gray-400 text-sm">Loading...</p>;
-  if (error) return <p className="text-red-500 text-sm">{error}</p>;
 
   return (
     <div className="space-y-4 max-w-4xl">

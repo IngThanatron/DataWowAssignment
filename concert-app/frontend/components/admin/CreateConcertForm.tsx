@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { api } from "../../lib/api";
 import { Button } from "../Button";
 
@@ -15,15 +16,13 @@ export default function CreateConcertForm({ onSuccess }: Props) {
     totalSeats: "",
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
   const handleSubmit = async () => {
     if (!form.name || !form.description || !form.totalSeats) {
-      setError("All fields are required");
+      toast.error("All fields are required");
       return;
     }
     setLoading(true);
-    setError("");
     try {
       await api.createConcert({
         name: form.name,
@@ -31,9 +30,10 @@ export default function CreateConcertForm({ onSuccess }: Props) {
         totalSeats: Number(form.totalSeats),
       });
       setForm({ name: "", description: "", totalSeats: "" });
+      toast.success("Concert created!");
       onSuccess();
     } catch (err: any) {
-      setError(err.message);
+      toast.error(err.message || "Failed to create concert");
     } finally {
       setLoading(false);
     }
@@ -82,8 +82,7 @@ export default function CreateConcertForm({ onSuccess }: Props) {
             min={1}
           />
         </div>
-        {error && <p className="text-red-500 text-sm">{error}</p>}
-        <Button onClick={handleSubmit} disabled={loading} bgColor="blue">
+<Button onClick={handleSubmit} disabled={loading} bgColor="blue">
           {loading ? "Creating..." : "Create Concert"}
         </Button>
       </div>
